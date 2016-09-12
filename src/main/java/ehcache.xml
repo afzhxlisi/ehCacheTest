@@ -1,0 +1,24 @@
+<!-- Ehcache2.x的变化(取自https://github.com/springside/springside4/wiki/Ehcache) -->
+<!-- 1)最好在ehcache.xml中声明不进行updateCheck -->
+<!-- 2)为了配合BigMemory和Size Limit,原来的属性最好改名 -->
+<!--   maxElementsInMemory->maxEntriesLocalHeap -->
+<!--   maxElementsOnDisk->maxEntriesLocalDisk -->
+<ehcache>
+	<diskStore path="java.io.tmpdir"/>
+	<cache name="users"
+		   maxElementsOnDisk="20000"
+		   maxElementsInMemory="2000"
+		   eternal="true"
+		   overflowToDisk="true"
+		   diskPersistent="true"/>
+		   <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+properties="peerDiscovery=manual,
+rmiUrls=//localhost:40001/users|//192.168.21.134:40001/users"/>
+<cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+properties="hostName=localhost, port=40001,
+socketTimeoutMillis=2000"/>
+<cacheEventListenerFactory
+class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true,
+replicateUpdatesViaCopy=false, replicateRemovals=true "/>
+</ehcache>

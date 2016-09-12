@@ -14,10 +14,8 @@ public class UserServiceImpl implements UserService{
 	
 	@CachePut(value="users",key="123")
 	@Override
-	   public User find(User user) {
+	public User find(User user) {
 			logger.info("db");
 			return new User();
-
 	   }
-
 }
